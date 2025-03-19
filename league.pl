@@ -68,4 +68,4 @@ goals(ter_stegen, 0).
 
 
 
-top_scorer(P):- goals(P,N),\+(goals(P1,N1),N1>N)).
+top_scorer(P):- goals(P,N),\+(goals(P1,N1),N1>N).
