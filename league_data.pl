@@ -65,3 +65,32 @@ goals(ronaldo_silva, 3).
 goals(de_jong, 4).  
 goals(ruben_dias, 1).  
 goals(ter_stegen, 0). 
+
+
+% task 3
+most_successful_team(T):-
+    team(T, _, X), not((team(_, _, Y), Y > X)), !.
+
+my_member(X, [X|_]).
+my_member(X, [_|Tail]):-
+    my_member(X, Tail).
+
+my_append([], L, L).
+my_append([H|T], L2, [H|NT]):-
+    my_append(T, L2, NT).
+
+
+% task 4
+matches_of_team(X, Result):-
+    matches_of_team(X, Result, []).
+
+
+matches_of_team(X, Result, Accumulator):-
+    match(Team1, Team2, G1, G2),
+    ((X == Team1); (X == Team2)),
+    not(my_member((Team1, Team2, G1, G2), Accumulator)),
+    my_append(Accumulator, [(Team1, Team2, G1, G2)], NewAcc),
+    !,
+    matches_of_team(X, Result, NewAcc).
+
+matches_of_team(_, Result,Result).
