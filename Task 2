@@ -1,1 +1,11 @@
+team_count_by_country(Country, Count) :-
+    teams_by_country(Country, 0, Count, []).
+
+teams_by_country(Country, N, Count, Teams) :-
+    team(Name, Country, _),
+    \+ my_member(Name, Teams),     N1 is N + 1,
+    teams_by_country(Country, N1, Count, [Name|Teams]),
+    !.
+teams_by_country(_, Count, Count, _) :- !.
+
 
