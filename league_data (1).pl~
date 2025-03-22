@@ -1,0 +1,136 @@
+
+% Facts: Teams
+team(barcelona, spain, 5).
+team(real_madrid, spain, 6).
+team(manchester_united, england, 3).
+team(liverpool, england, 4).
+team(juventus, italy, 7).
+team(bayern_munich, germany, 8).
+team(psg, france, 3).
+team(inter_milan, italy, 3).
+team(ajax, netherlands, 4).
+team(porto, portugal, 7).
+
+% Facts: Players
+player(messi, barcelona, forward).
+player(ronaldo, real_madrid, forward).
+player(pogba, manchester_united, midfielder).
+player(salah, liverpool, forward).
+player(modric, real_madrid, midfielder).
+player(alisson, liverpool, goalkeeper).
+player(ter_stegen, barcelona, goalkeeper).
+player(varane, manchester_united, defender).
+player(dybala, juventus, forward).
+player(lewandowski, bayern_munich, forward).
+player(neymar, psg, forward).
+player(van_dijk, liverpool, defender).
+player(ben_yedder, monaco, forward).
+player(ronaldo_silva, manchester_city, midfielder).
+player(de_jong, barcelona, midfielder).
+player(ruben_dias, manchester_city, defender).
+
+% Facts: Matches
+match(barcelona, real_madrid, 3, 2).
+match(manchester_united, liverpool, 1, 1).
+match(real_madrid, manchester_united, 2, 0).
+match(liverpool, barcelona, 2, 2).
+match(juventus, inter_milan, 1, 2).
+match(bayern_munich, psg, 3, 1).
+match(ajax, porto, 2, 1).
+match(manchester_city, juventus, 2, 2).
+match(liverpool, bayern_munich, 0, 3).
+match(real_madrid, ajax, 4, 1).
+
+% Facts: Goals
+goals(messi, 10).
+goals(ronaldo, 12).
+goals(pogba, 5).
+goals(salah, 11).
+goals(modric, 4).
+goals(alisson, 0).
+goals(dybala, 8).
+goals(lewandowski, 9).
+goals(neymar, 7).
+goals(van_dijk, 2).
+goals(ben_yedder, 6).
+goals(ronaldo_silva, 3).
+goals(de_jong, 4).
+goals(ruben_dias, 1).
+goals(ter_stegen, 0).
+
+
+%task 1
+% Collect all matches into a list manually
+my_member(X, [X|_]) :- !.
+my_member(X, [_|Tail]) :- my_member(X, Tail).
+
+players_in_team(Team, List) :-
+    collect_players(Team, [], List),
+    !.
+
+collect_players(Team, Acc, List) :-
+    player(Player, Team, _),
+    \+ my_member(Player, Acc),
+    collect_players(Team, [Player|Acc], List).
+collect_players(_, List, List).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%task 5 contkjjiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+num_matches_of_team(Team, Count) :-
+    count_team_matches(Team, [], 0, Count).
+
+count_team_matches(Team, SeenMatches, CurrentCount, TotalCount) :-
+    match(Team, OtherTeam, _, _),
+    Match = (Team, OtherTeam),
+    \+ my_member(Match, SeenMatches),
+    NewCount is CurrentCount + 1,
+    !,      count_team_matches(Team, [Match | SeenMatches], NewCount, TotalCount).
+count_team_matches(Team, SeenMatches, CurrentCount, TotalCount) :-
+    match(OtherTeam, Team, _, _),
+    Match = (OtherTeam, Team),
+    \+ my_member(Match, SeenMatches),
+    NewCount is CurrentCount + 1,
+    !,
+    count_team_matches(Team, [Match | SeenMatches], NewCount, TotalCount).
+
+count_team_matches(_, _, Count, Count) :- !.
+
+%task 2% Predicate to count the number of teams from a given
+team_count_by_country(Country, Count) :-
+    teams_by_country(Country, 0, Count, []).
+
+teams_by_country(Country, N, Count, Teams) :-
+    team(Name, Country, _),
+    \+ my_member(Name, Teams),     N1 is N + 1,
+    teams_by_country(Country, N1, Count, [Name|Teams]),
+    !.
+teams_by_country(_, Count, Count, _) :- !.
+
+
+
+
