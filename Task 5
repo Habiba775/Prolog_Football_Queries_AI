@@ -1,1 +1,18 @@
 
+%task 5
+num_matches_of_team(Team, Count) :-
+    count_team_matches(Team, [], 0, Count).
+
+count_team_matches(Team, SeenMatches, CurrentCount, TotalCount) :-
+    match(Team, OtherTeam, _, _),
+    Match = (Team, OtherTeam),
+    \+ my_member(Match, SeenMatches),
+    NewCount is CurrentCount + 1,
+    !,      count_team_matches(Team, [Match | SeenMatches], NewCount, TotalCount).
+count_team_matches(Team, SeenMatches, CurrentCount, TotalCount) :-
+    match(OtherTeam, Team, _, _),
+    Match = (OtherTeam, Team),
+    \+ my_member(Match, SeenMatches),
+    NewCount is CurrentCount + 1,
+    !,
+    count_team_matches(Team, [Match | SeenMatches], NewCount, TotalCount).
